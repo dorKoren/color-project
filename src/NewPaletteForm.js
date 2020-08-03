@@ -99,6 +99,7 @@ class NewPaletteForm extends Component {
         this.updateCurrentColor = this.updateCurrentColor.bind(this);
         this.addNewColor = this.addNewColor.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -109,10 +110,10 @@ class NewPaletteForm extends Component {
         );
 
         ValidatorForm.addValidationRule("isColorUnique", value => 
-        this.state.colors.every(
-            ({color}) => color !== this.state.currentColor
-        )
-    );
+            this.state.colors.every(
+                ({color}) => color !== this.state.currentColor
+            )
+        );
     }
 
     handleDrawerOpen = () => {
@@ -138,7 +139,18 @@ class NewPaletteForm extends Component {
 
     handleChange(evt) {
         this.setState({ newName: evt.target.value });
+    }
 
+    handleSubmit() {
+        let newName = "new Test Palette";
+        const newPalette = {
+            paletteName: newName,
+            id: newName.toLowerCase().replace(/ /g, "-"),
+            colors: this.state.colors
+        };
+
+        this.props.savePalette(newPalette);
+        this.props.history.push("/");
     }
 
     render() {
@@ -148,26 +160,41 @@ class NewPaletteForm extends Component {
         return (
             <div className={classes.root}>
                 <CssBaseline />
+
                 <AppBar
                 position='fixed'
                 className={classNames(classes.appBar, {
                     [classes.appBarShift]: open
                 })}
                 >
-                <Toolbar disableGutters={!open}>
-                    <IconButton
-                    color='inherit'
-                    aria-label='Open drawer'
-                    onClick={this.handleDrawerOpen}
-                    className={classNames(classes.menuButton, open && classes.hide)}
-                    >
-                    <MenuIcon />
-                    </IconButton>
-                    <Typography variant='h6' color='inherit' noWrap>
-                    Persistent drawer
-                    </Typography>
-                </Toolbar>
+                    <Toolbar disableGutters={!open}>
+                        <IconButton
+                            color='inherit'
+                            aria-label='Open drawer'
+                            onClick={this.handleDrawerOpen}
+                            className={classNames(classes.menuButton, open && classes.hide)}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+
+                        <Typography 
+                            variant='h6' 
+                            color='inherit' 
+                            noWrap
+                        >
+                            Persistent drawer
+                        </Typography>
+
+                        <Button 
+                            variant="contained" 
+                            color='primary'
+                            onClick={this.handleSubmit}
+                        >
+                            Save Palette
+                        </Button>
+                    </Toolbar>
                 </AppBar>
+
                 <Drawer
                 className={classes.drawer}
                 variant='persistent'
