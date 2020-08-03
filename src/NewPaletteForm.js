@@ -92,8 +92,9 @@ class NewPaletteForm extends Component {
         this.state = {
             open: true,
             currentColor: "teal",
-            newName: "",
-            colors: [{color: 'blue', name: 'blue'}]
+            newColorName: "",
+            colors: [{color: 'blue', name: 'blue'}],
+            newPaletteName: ""
         };
 
         this.updateCurrentColor = this.updateCurrentColor.bind(this);
@@ -105,7 +106,7 @@ class NewPaletteForm extends Component {
     componentDidMount() {
         ValidatorForm.addValidationRule("isColorNameUnique", value => 
             this.state.colors.every(
-                ({name}) => name.toLowerCase() !== value.toLowerCase()
+                ({ name }) => name.toLowerCase() !== value.toLowerCase()
             )
         );
 
@@ -114,6 +115,14 @@ class NewPaletteForm extends Component {
                 ({color}) => color !== this.state.currentColor
             )
         );
+
+        
+        ValidatorForm.addValidationRule("isPaletteNameUnique", value => 
+            this.props.palettes.every(
+                ({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase()
+            )
+        );
+        
     }
 
     handleDrawerOpen = () => {
@@ -131,18 +140,24 @@ class NewPaletteForm extends Component {
     addNewColor() {
         const newColor = {
             color: this.state.currentColor,
-            name: this.state.newName
+            name: this.state.newColorName
         };
 
-        this.setState({ colors: [...this.state.colors, newColor], newName:'' });
+        this.setState({ 
+            colors: [...this.state.colors, newColor],
+            newColorName:"" 
+        });
     }
 
     handleChange(evt) {
-        this.setState({ newName: evt.target.value });
+
+        this.setState({
+            [evt.target.name]: evt.target.value
+        });
     }
 
     handleSubmit() {
-        let newName = "new Test Palette";
+        let newName = this.state.newPaletteName;
         const newPalette = {
             paletteName: newName,
             id: newName.toLowerCase().replace(/ /g, "-"),
@@ -155,7 +170,7 @@ class NewPaletteForm extends Component {
 
     render() {
         const { classes } = this.props;
-        const { open, colors, currentColor,  newName } = this.state;
+        const { open, colors, currentColor,  newColorName, newPaletteName } = this.state;
 
         return (
             <div className={classes.root}>
@@ -185,13 +200,20 @@ class NewPaletteForm extends Component {
                             Persistent drawer
                         </Typography>
 
-                        <Button 
-                            variant="contained" 
-                            color='primary'
-                            onClick={this.handleSubmit}
-                        >
-                            Save Palette
-                        </Button>
+                        <ValidatorForm onSubmit={this.handleSubmit}>
+                            <TextValidator 
+                                label="Palette Name"
+                                value={newPaletteName}
+                                name="newPaletteName"
+                                onChange={this.handleChange}
+                                validators={["required", "isPaletteNameUnique"]}
+                                errorMessages={["Enter Palette Name", "Name already used"]}
+                            />
+
+                            <Button variant="contained" color='primary' type="submit">
+                                Save Palette
+                            </Button>
+                        </ValidatorForm>
                     </Toolbar>
                 </AppBar>
 
@@ -226,7 +248,8 @@ class NewPaletteForm extends Component {
 
                 <ValidatorForm onSubmit={this.addNewColor} ref='form'>
                     <TextValidator 
-                        value={newName} 
+                        value={newColorName}
+                        name="newColorName"
                         onChange={this.handleChange}
                         validators={[
                             "required", 
