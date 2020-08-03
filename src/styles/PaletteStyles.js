@@ -19,7 +19,6 @@ export default {
       marginBottom: "-3.5px",
       opacity: 1,
       backgroundColor: 'black',
-      position: 'relative',
       '& a': {
         color: 'white',
         width: "100px",
