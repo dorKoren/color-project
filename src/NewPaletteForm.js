@@ -178,6 +178,7 @@ class NewPaletteForm extends Component {
 
                 <AppBar
                 position='fixed'
+                color='default'
                 className={classNames(classes.appBar, {
                     [classes.appBarShift]: open
                 })}
