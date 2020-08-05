@@ -168,6 +168,12 @@ class NewPaletteForm extends Component {
         this.props.history.push("/");
     }
 
+    removeColor(colorName) {
+        this.setState({
+            colors: this.state.colors.filter(color => (color.name !== colorName))
+        });
+    }
+
     render() {
         const { classes } = this.props;
         const { open, colors, currentColor,  newColorName, newPaletteName } = this.state;
@@ -219,74 +225,77 @@ class NewPaletteForm extends Component {
                 </AppBar>
 
                 <Drawer
-                className={classes.drawer}
-                variant='persistent'
-                anchor='left'
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper
-                }}
+                    className={classes.drawer}
+                    variant='persistent'
+                    anchor='left'
+                    open={open}
+                    classes={{
+                        paper: classes.drawerPaper
+                    }}
                 >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={this.handleDrawerClose}>
-                    <ChevronLeftIcon />
-                    </IconButton>
-                </div>
+                    <div className={classes.drawerHeader}>
+                        <IconButton onClick={this.handleDrawerClose}>
+                        <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
 
-                <Divider />
-
-                <Typography variant='h4'>Design Your Palette</Typography>
+                    <Divider />
+    
+                    <Typography variant='h4'>Design Your Palette</Typography>
                 
-                <div>
-                    <Button variant='contained' color='secondary'>Clear Palette</Button>
-                    <Button variant='contained' color='primary'>Random Color</Button>
-                </div>
+                    <div>
+                        <Button variant='contained' color='secondary'>Clear Palette</Button>
+                        <Button variant='contained' color='primary'>Random Color</Button>
+                    </div>
 
-                <ChromePicker  
-                    color={currentColor} 
-                    onChangeComplete={newColor => this.updateCurrentColor(newColor)}
-                />
-
-                <ValidatorForm onSubmit={this.addNewColor} ref='form'>
-                    <TextValidator 
-                        value={newColorName}
-                        name="newColorName"
-                        onChange={this.handleChange}
-                        validators={[
-                            "required", 
-                            "isColorNameUnique", 
-                            "isColorUnique"
-                        ]}
-                        errorMessages={[
-                            "Enter a color name", 
-                            "Color name must be unique",
-                            "Color already used!"
-                        ]} 
+                    <ChromePicker  
+                        color={currentColor} 
+                        onChangeComplete={newColor => this.updateCurrentColor(newColor)}
                     />
-                    <Button
-                        type='submit'
-                        variant='contained' 
-                        color='primary' 
-                        style={{backgroundColor: currentColor}}
-                    >
-                        Add Color
-                    </Button>
-                </ValidatorForm>
 
+                    <ValidatorForm onSubmit={this.addNewColor} ref='form'>
+                        <TextValidator 
+                            value={newColorName}
+                            name="newColorName"
+                            onChange={this.handleChange}
+                            validators={[
+                                "required", 
+                                "isColorNameUnique", 
+                                "isColorUnique"
+                            ]}
+                            errorMessages={[
+                                "Enter a color name", 
+                                "Color name must be unique",
+                                "Color already used!"
+                            ]} 
+                        />
 
-
+                        <Button
+                            type='submit'
+                            variant='contained' 
+                            color='primary' 
+                            style={{backgroundColor: currentColor}}
+                        >
+                            Add Color
+                        </Button>
+                    </ValidatorForm>
                 </Drawer>
+
                 <main
-                className={classNames(classes.content, {
-                    [classes.contentShift]: open
-                })}
+                    className={classNames(classes.content, {
+                        [classes.contentShift]: open
+                    })}
                 >
-                <div className={classes.drawerHeader} />
+                    <div className={classes.drawerHeader} />
 
-                {colors.map(color => (
-                    <DraggableColorBox color={color.color} name={color.name} />
-                ))}
-
+                    {colors.map(color => (
+                        <DraggableColorBox
+                            key={color.name} 
+                            color={color.color} 
+                            name={color.name} 
+                            handleClick={() => this.removeColor(color.name)}
+                        />
+                    ))}
                 </main>
             </div>
         );
