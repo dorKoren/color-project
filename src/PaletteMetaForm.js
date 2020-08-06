@@ -74,7 +74,6 @@ class PaletteMetaForm extends Component {
 
             <Dialog
                 open={stage === "form"}
-                onClose={this.handleClose}
                 aria-labelledby='form-dialog-title'
                 onClose={hideForm}
             >
@@ -95,7 +94,7 @@ class PaletteMetaForm extends Component {
                             name='newPaletteName'
                             onChange={this.handleChange}
                             fullWidth
-                            marginNormal
+                            margin='normal'
                             validators={["required", "isPaletteNameUnique"]}
                             errorMessages={["Enter Palette Name", "Name already used"]}
                         />
