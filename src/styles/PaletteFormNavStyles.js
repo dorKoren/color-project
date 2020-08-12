@@ -1,4 +1,5 @@
 import { DRAWER_WIDTH } from "../constants"; 
+import sizes from "./sizes"; 
 
 const drawerWidth = DRAWER_WIDTH;
 
@@ -38,13 +39,23 @@ const styles = theme => ({
 
       navBtns: {
           marginRight: "1rem",
+
           "& a": {
             textDecoration: "none"
+          },
+
+          [sizes.down("xs")]: {
+            marginRight: ".5rem"
           }
       },
 
       button: {
           margin: "0 .5rem",
+
+          [sizes.down("xs")]: {
+            margin: "0 .2rem",
+            padding: ".3rem"
+          }
       }
 });
 
