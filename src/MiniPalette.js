@@ -11,7 +11,7 @@ class MiniPalette extends Component {
 
   deletePalette(e) {
     e.stopPropagation();
-    this.props.handleDelete(this.props.id)
+    this.props.openDialog((this.props.id));
   }
 
   render() {
@@ -23,6 +23,7 @@ class MiniPalette extends Component {
         key={color.name}
       />
     ));
+    
     return (
       <div className={classes.root} onClick={handleClick}>
           <DeleteICon 
