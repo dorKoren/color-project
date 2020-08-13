@@ -28,6 +28,7 @@ class PaletteList extends Component {
     this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.goToPallete = this.goToPallete.bind(this);
   }
 
   openDialog(id) {
@@ -43,12 +44,12 @@ class PaletteList extends Component {
     this.setState({ openDeleteDialog: false, deletingId: "" });
   }
 
-  goToPalette(id) {
+  goToPallete(id) {
     this.props.history.push(`/palette/${id}`);
   }
 
   render() {
-    const { palettes, classes, deletePalette } = this.props;
+    const { palettes, classes } = this.props;
     const { openDeleteDialog } = this.state;
 
     return (
@@ -67,8 +68,8 @@ class PaletteList extends Component {
               >
                 <MiniPalette
                   {...palette}
-                  handleClick={() => this.goToPalette(palette.id)}
-                  handleDelete={deletePalette}
+                  goToPallete={this.goToPallete}
+                  //handleDelete={deletePalette}
                   openDialog={this.openDialog}
                   key={palette.id}
                   id={palette.id}
