@@ -11,6 +11,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
 import DraggableColorList from './DraggableColorList';
 import { arrayMove } from "react-sortable-hoc";
+import seedColors from './seedColors';
 import styles from "./styles/NewPaletteFormStyles";
 
 class NewPaletteForm extends Component {
@@ -23,7 +24,7 @@ class NewPaletteForm extends Component {
 
         this.state = {
             open: true,
-            colors: this.props.palettes[0].colors,
+            colors: seedColors[0].colors
         };
 
         this.addNewColor = this.addNewColor.bind(this);
